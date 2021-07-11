@@ -158,6 +158,12 @@
     where username = #{username}
   </select>
 
+  <!--查询邮箱email是否存在-->
+  <select id="checkEmail" resultType="int" parameterType="string">
+    select count(1) from mall_email
+    where email = #{email}
+  </select>
+
   <!--查询user数据-->
   <!--不要使用select *，想查哪个就查哪个-->
   <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
@@ -167,5 +173,6 @@
     where username = #{username}
     and password = #{password}
   </select>
+
 
 </mapper>
