@@ -198,5 +198,13 @@
     where username = #{username}
   </select>
 
+  <select id="checkPassword" resultType="int" parameterType="map">
+    select
+    count(1)
+    from mall_user
+    where id = #{userId}
+    and password = #{password}
+  </select>
+
 
 </mapper>
