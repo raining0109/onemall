@@ -51,4 +51,13 @@ public class UserController {
         return iUserService.register(user);
     }
 
+    /**
+     *  检查用户名或邮箱是否已经存在，供前端实时调用检验用户填写的字段
+     */
+    @RequestMapping(value = "check_valid.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> checkValid(String str,String type) {
+        return iUserService.checkValid(str,type);
+    }
+
 }

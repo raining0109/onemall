@@ -39,14 +39,16 @@ public class UserServiceImpl implements IUserService {
 
     public ServerResponse<String> register(User user) {
 
-        int resultCount = userMapper.checkUsername(user.getUsername());
-        if (resultCount > 0) {
-            return ServerResponse.createByErrorMessage("用户名已存在");
+        ServerResponse validResponse = this.checkValid(user.getUsername(), Const.USERNAME);
+        if (!validResponse.isSuccess()) {
+            return validResponse;
         }
-        resultCount = userMapper.checkEmail(user.getEmail());
-        if (resultCount > 0) {
-            return ServerResponse.createByErrorMessage("email已存在");
+        validResponse = this.checkValid(user.getEmail(), Const.EMAIL);
+        if (!validResponse.isSuccess()) {
+            return validResponse;
         }
+
+        //逻辑到这里就已经通过检验了
 
         //设置新用户角色——普通用户
         user.setRole(Const.Role.ROLE_CUSTOMER);
@@ -54,12 +56,33 @@ public class UserServiceImpl implements IUserService {
         //MD5加密
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
 
-        resultCount = userMapper.insert(user);
+        int resultCount = userMapper.insert(user);
         if (resultCount == 0) {
             return ServerResponse.createByErrorMessage("注册失败");
         }
         return ServerResponse.createBySuccessMessage("注册成功");
 
 
+    }
+
+    public ServerResponse<String> checkValid(String str,String type) {
+        if (StringUtils.isNotBlank(type)) {
+            //如果type不是空白(eg:" ",""),则向下判断
+            if (Const.USERNAME.equals(type)) {
+                int resultCount = userMapper.checkUsername(str);
+                if (resultCount > 0) {
+                    return ServerResponse.createByErrorMessage("用户名已存在");
+                }
+            }
+            if (Const.EMAIL.equals(type)) {
+                int resultCount = userMapper.checkEmail(str);
+                if (resultCount > 0) {
+                    return ServerResponse.createByErrorMessage("email已存在");
+                }
+            }
+        } else {
+            return ServerResponse.createByErrorMessage("参数错误");
+        }
+        return ServerResponse.createBySuccessMessage("校验成功");
     }
 }
