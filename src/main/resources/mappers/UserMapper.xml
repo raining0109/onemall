@@ -174,5 +174,13 @@
     and password = #{password}
   </select>
 
+  <!--根据用户名查找用户问题，用于找回密码-->
+  <select id="selectQuestionByUsername" resultType="string" parameterType="string">
+    select
+    question
+    from mall_user
+    where username = #{username}
+  </select>
+
 
 </mapper>
