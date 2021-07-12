@@ -192,5 +192,11 @@
     and answer = #{answer}
   </select>
 
+  <select id="updatePasswordByUsername" parameterType="map" resultType="int">
+    update mall_user
+    set password = #{passwordNew}, update_time = now()
+    where username = #{username}
+  </select>
+
 
 </mapper>

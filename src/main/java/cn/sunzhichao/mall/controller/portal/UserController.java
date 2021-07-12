@@ -91,4 +91,13 @@ public class UserController {
         return iUserService.checkAnswer(username, question, answer);
     }
 
+    /**
+     * 重置密码，需要从前端获取token与缓存中的比较是否一致，防止横向越权
+     */
+    @RequestMapping(value = "forget_reset_password.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken) {
+        return iUserService.forgetResetPassword(username,passwordNew,forgetToken);
+    }
+
 }
