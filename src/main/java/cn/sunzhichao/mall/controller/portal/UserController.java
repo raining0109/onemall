@@ -22,7 +22,7 @@ public class UserController {
     /**
      * 用户登录
      */
-    @RequestMapping(value = "login.do",method = RequestMethod.POST)
+    @RequestMapping(value = "login.do", method = RequestMethod.POST)
     @ResponseBody
     //这里@ResponseBody，通过@ResponseBody注解告知SpringMVC框架，
     // 方法返回的字符串不是跳转是直接在http响应体中返回。
@@ -33,7 +33,7 @@ public class UserController {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
             //把用户放在session里
-            session.setAttribute(Const.CURRENT_USER,response.getData());
+            session.setAttribute(Const.CURRENT_USER, response.getData());
         }
         return response;
     }
@@ -52,12 +52,25 @@ public class UserController {
     }
 
     /**
-     *  检查用户名或邮箱是否已经存在，供前端实时调用检验用户填写的字段
+     * 检查用户名或邮箱是否已经存在，供前端实时调用检验用户填写的字段
      */
     @RequestMapping(value = "check_valid.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> checkValid(String str,String type) {
-        return iUserService.checkValid(str,type);
+    public ServerResponse<String> checkValid(String str, String type) {
+        return iUserService.checkValid(str, type);
+    }
+
+    /**
+     * 获取用户登录信息
+     */
+    @RequestMapping(value = "get_user_info.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<User> getUserInfo(HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user != null) {
+            return ServerResponse.createBySuccess(user);
+        }
+        return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
     }
 
 }
