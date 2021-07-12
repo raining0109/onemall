@@ -114,5 +114,27 @@ public class UserController {
         return iUserService.resetPassword(passwordOld, passwordNew, user);
     }
 
+    /**
+     * 更新用户个人信息,然后把新的用户信息放在session，并且把User信息返回给前端
+     */
+    @RequestMapping(value = "update_information.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<User> updateInformation(HttpSession session, User user) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        user.setId(currentUser.getId());
+        user.setUsername(currentUser.getUsername());
+        ServerResponse<User> response = iUserService.updateInformation(user);
+        if (response.isSuccess()) {
+            //更新session
+            session.setAttribute(Const.CURRENT_USER,response.getData());
+        }
+
+        //失败
+        return response;
+    }
+
 
 }

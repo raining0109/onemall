@@ -206,5 +206,11 @@
     and password = #{password}
   </select>
 
+  <select id="checkEmailByUserId" resultType="int" parameterType="map">
+    select count(1) from mall_user
+    where email = #{email}
+    and id != #{userId}
+  </select>
+
 
 </mapper>
