@@ -1,6 +1,7 @@
 package cn.sunzhichao.mall.controller.portal;
 
 import cn.sunzhichao.mall.common.Const;
+import cn.sunzhichao.mall.common.ResponseCode;
 import cn.sunzhichao.mall.common.ServerResponse;
 import cn.sunzhichao.mall.pojo.User;
 import cn.sunzhichao.mall.service.IUserService;
@@ -135,6 +136,21 @@ public class UserController {
         //失败
         return response;
     }
+
+    /**
+     * 获取用户个人信息，如果用户未登录，则强制登录
+     */
+    @RequestMapping(value = "get_information.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse getInformation(HttpSession session) {
+
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，需要强制登陆");
+        }
+        return iUserService.getInformation(currentUser.getId());
+    }
+
 
 
 }
