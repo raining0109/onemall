@@ -85,4 +85,25 @@ public class CategoryManageController {
         }
 
     }
+
+    /**
+     * 查询给定分类结点的所有子节点，递归查询
+     */
+    @RequestMapping(value = "get_deep_category.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId) {
+        //判断是否登录
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
+        }
+        //校验一下是否是管理员
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            //业务逻辑，查询当前节点的id和递归子节点的id
+            return iCategoryService.selectCategoryAndChildrenById(categoryId);
+        } else {
+            return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
+        }
+
+    }
 }

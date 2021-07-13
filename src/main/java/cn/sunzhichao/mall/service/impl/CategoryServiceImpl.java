@@ -4,13 +4,17 @@ import cn.sunzhichao.mall.common.ServerResponse;
 import cn.sunzhichao.mall.dao.CategoryMapper;
 import cn.sunzhichao.mall.pojo.Category;
 import cn.sunzhichao.mall.service.ICategoryService;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("iCategoryService")
 public class CategoryServiceImpl implements ICategoryService {
@@ -63,5 +67,40 @@ public class CategoryServiceImpl implements ICategoryService {
             logger.info("未找到当前分类的子分类");
         }
         return ServerResponse.createBySuccess(categoryList);
+    }
+
+    /**
+     * 递归查询本节点的id和孩子节点的id
+     */
+    public ServerResponse selectCategoryAndChildrenById(Integer categoryId) {
+
+        HashSet<Category> categorySet = Sets.newHashSet();
+        findChildCategory(categorySet,categoryId);
+
+        //因为要返回list，同时要返回的是id的list，所以还要做一下转换
+        List<Integer> categoryIdList = Lists.newArrayList();
+        if (categoryId != null) {
+            for (Category categoryItem : categorySet) {
+                categoryIdList.add(categoryItem.getId());
+            }
+        }
+        return ServerResponse.createBySuccess(categoryIdList);
+    }
+
+    //私有方法使用set进行排重，但是要注意的是需要自己重写hashcode和equals方法
+    //equals相同hashcode一定相等，hashcode相等equals不一定相等
+    //重写两者时，最好保证两个判断的变量是一致的
+    private Set<Category> findChildCategory(Set<Category> categorySet, Integer categoryId) {
+
+        Category category = categoryMapper.selectByPrimaryKey(categoryId);
+        if (category != null) {
+            categorySet.add(category);
+        }
+        //查找子节点
+        List<Category> categoryList = categoryMapper.selectCategoryChildrenByParentId(categoryId);
+        for (Category categoryItem : categoryList) {
+            findChildCategory(categorySet,categoryItem.getId());
+        }
+        return categorySet;
     }
 }
