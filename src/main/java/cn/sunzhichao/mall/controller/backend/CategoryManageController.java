@@ -63,4 +63,26 @@ public class CategoryManageController {
             return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
         }
     }
+
+    /**
+     * 查询给定分类结点的子节点，不递归查询
+     */
+    @RequestMapping(value = "get_category.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse getChildrenParallelCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId) {
+        //判断是否登录
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
+        }
+        //校验一下是否是管理员
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            //业务逻辑，查询子节点的category信息，并且不递归，保持平级
+            return iCategoryService.getChildrenParallelCategory(categoryId);
+
+        } else {
+            return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
+        }
+
+    }
 }
