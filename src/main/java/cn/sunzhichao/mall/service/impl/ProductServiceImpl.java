@@ -10,9 +10,15 @@ import cn.sunzhichao.mall.service.IProductService;
 import cn.sunzhichao.mall.util.DateTimeUtil;
 import cn.sunzhichao.mall.util.PropertiesUtil;
 import cn.sunzhichao.mall.vo.ProductDetailVo;
+import cn.sunzhichao.mall.vo.ProductListVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("iProductService")
 public class ProductServiceImpl implements IProductService {
@@ -126,5 +132,49 @@ public class ProductServiceImpl implements IProductService {
         productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
 
         return productDetailVo;
+    }
+
+    /**
+     * 获得产品列表，分页
+     */
+    public ServerResponse<PageInfo> getProductList(int pageNum, int pageSize) {
+        //startPage--start
+        //填充自己的sql查询逻辑
+        //pageHelper--收尾
+        PageHelper.startPage(pageNum, pageSize);
+        List<Product> productList = productMapper.selectList();
+
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for (Product productItem : productList) {
+            ProductListVo productListVo = assembleProductListVo(productItem);
+            productListVoList.add(productListVo);
+        }
+
+        PageInfo pageResult = new PageInfo(productList);
+        pageResult.setList(productListVoList);
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+    /**
+     * productListVo的组装方法
+     */
+    private ProductListVo assembleProductListVo(Product product) {
+
+        ProductListVo productListVo = new ProductListVo();
+
+        productListVo.setId(product.getId());
+        productListVo.setSubtitle(product.getSubtitle());
+        productListVo.setPrice(product.getPrice());
+        productListVo.setMainImage(product.getMainImage());
+        productListVo.setCategoryId(product.getCategoryId());
+        productListVo.setName(product.getName());
+        productListVo.setStatus(product.getStatus());
+
+        //设置imageHost
+        String endpoint = PropertiesUtil.getProperty("aliyunoss.endpoint", "");
+        String bucketName = PropertiesUtil.getProperty("aliyunoss.bucketName", "");
+        productListVo.setImageHost(endpoint + "/" + bucketName);
+
+        return productListVo;
     }
 }
