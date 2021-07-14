@@ -183,4 +183,18 @@
     from mmall_product
     order by id asc  /*注意后面不要留下分号;，因为否则的话，aop增强可能会失败*/
   </select>
+
+  <select id="selectByNameAndProductId" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from mmall_product
+    <where>
+        <if test="productName != null">
+            and name like #{productName}
+        </if>
+        <if test="productId != null">
+            and id = #{productId}
+        </if>
+    </where>
+  </select>
 </mapper>
