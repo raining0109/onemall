@@ -40,4 +40,23 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("无权限操作");
         }
     }
+
+    /**
+     * 设置产品的销售状态
+     */
+    @RequestMapping(value = "set_sale_status.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse setSaleStatus(HttpSession session, Integer productId, Integer status) {
+
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+        }
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            //填充新增产品的业务逻辑
+            return iProductService.setSaleStatus(productId, status);
+        } else {
+            return ServerResponse.createByErrorMessage("无权限操作");
+        }
+    }
 }
