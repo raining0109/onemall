@@ -115,9 +115,7 @@ public class ProductServiceImpl implements IProductService {
         productDetailVo.setStock(product.getStock());
 
         //设置imageHost
-        String endpoint = PropertiesUtil.getProperty("aliyunoss.endpoint", "");
-        String bucketName = PropertiesUtil.getProperty("aliyunoss.bucketName", "");
-        productDetailVo.setImageHost(endpoint + "/" + bucketName);
+        productDetailVo.setImageHost(PropertiesUtil.getProperty("aliyunoss.filePath"));
 
         //设置父分类id
         Category category = categoryMapper.selectByPrimaryKey(product.getCategoryId());
@@ -171,9 +169,7 @@ public class ProductServiceImpl implements IProductService {
         productListVo.setStatus(product.getStatus());
 
         //设置imageHost
-        String endpoint = PropertiesUtil.getProperty("aliyunoss.endpoint", "");
-        String bucketName = PropertiesUtil.getProperty("aliyunoss.bucketName", "");
-        productListVo.setImageHost(endpoint + "/" + bucketName);
+        productListVo.setImageHost(PropertiesUtil.getProperty("aliyunoss.filePath"));
 
         return productListVo;
     }

@@ -5,8 +5,12 @@
     <title>INDEX</title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
+
+springmvc 上传文件测试
+<form name="form" action="/manage/product/upload.do" method="post" enctype="multipart/form-data">
+    <input type="file" name="upload_file">
+    <input type="submit" value="springMVC上传文件">
+</form>
+
 </body>
 </html>
