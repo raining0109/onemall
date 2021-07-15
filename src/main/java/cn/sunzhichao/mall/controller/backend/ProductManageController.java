@@ -193,7 +193,7 @@ public class ProductManageController {
             resultMap.put("msg", "上传成功");
             resultMap.put("file_path", url);
             //和前端的约定
-            response.addHeader("Access-Control-Allow-Headers","X-File-Name");
+            response.addHeader("Access-Control-Allow-Headers", "X-File-Name");
             return resultMap;
         } else {
             resultMap.put("success", false);
