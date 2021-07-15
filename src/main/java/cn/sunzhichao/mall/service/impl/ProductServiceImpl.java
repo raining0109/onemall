@@ -189,7 +189,7 @@ public class ProductServiceImpl implements IProductService {
             productName = new StringBuilder().append("%").append(productName).append("%").toString();
         }
         //通过名字和id查询
-        List<Product> productList = productMapper.selectByNameAndProductId(productName, productName);
+        List<Product> productList = productMapper.selectByNameAndProductId(productName, productId);
 
         List<ProductListVo> productListVoList = Lists.newArrayList();
         for (Product productItem : productList) {

@@ -177,11 +177,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <!--/*注意后面不要留下分号;，因为否则的话，aop增强可能会失败*/-->
   <select id="selectList" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"></include>
     from mmall_product
-    order by id asc  /*注意后面不要留下分号;，因为否则的话，aop增强可能会失败*/
+    order by  id asc
   </select>
 
   <select id="selectByNameAndProductId" parameterType="map" resultMap="BaseResultMap">
