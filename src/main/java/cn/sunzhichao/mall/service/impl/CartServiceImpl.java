@@ -12,6 +12,7 @@ import cn.sunzhichao.mall.util.BigDecimalUtil;
 import cn.sunzhichao.mall.util.PropertiesUtil;
 import cn.sunzhichao.mall.vo.CartProductVo;
 import cn.sunzhichao.mall.vo.CartVo;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,11 +68,31 @@ public class CartServiceImpl implements ICartService {
                     ResponseCode.ILLEGAL_ARGUMENT.getDesc()
             );
         }
-        Cart cart = cartMapper.selectCartByUserIdProductId(userId,productId);
+        Cart cart = cartMapper.selectCartByUserIdProductId(userId, productId);
         if (cart != null) {
             cart.setQuantity(count);
         }
         cartMapper.updateByPrimaryKeySelective(cart);
+
+        CartVo cartVo = this.getCartVoLimit(userId);
+        return ServerResponse.createBySuccess(cartVo);
+    }
+
+    /**
+     * 删除购物车中的商品
+     */
+    public ServerResponse<CartVo> deleteProduct(Integer userId, String productIds) {
+
+        List<String> productIdList = Splitter.on(",").splitToList(productIds);
+        if (CollectionUtils.isEmpty(productIdList)) {
+            //参数错误
+            return ServerResponse.createByErrorCodeMessage(
+                    ResponseCode.ILLEGAL_ARGUMENT.getCode(),
+                    ResponseCode.ILLEGAL_ARGUMENT.getDesc()
+            );
+        }
+        //参数有效，执行删除操作
+        cartMapper.deleteByUserIdProductIds(userId, productIdList);
 
         CartVo cartVo = this.getCartVoLimit(userId);
         return ServerResponse.createBySuccess(cartVo);

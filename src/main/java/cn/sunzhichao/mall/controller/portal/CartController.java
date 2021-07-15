@@ -5,6 +5,7 @@ import cn.sunzhichao.mall.common.ResponseCode;
 import cn.sunzhichao.mall.common.ServerResponse;
 import cn.sunzhichao.mall.pojo.User;
 import cn.sunzhichao.mall.service.ICartService;
+import cn.sunzhichao.mall.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class CartController {
      */
     @RequestMapping(value = "add.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse add(HttpSession session, Integer count, Integer productId) {
+    public ServerResponse<CartVo> add(HttpSession session, Integer count, Integer productId) {
 
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
@@ -39,7 +40,7 @@ public class CartController {
      */
     @RequestMapping(value = "update.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse update(HttpSession session, Integer count, Integer productId) {
+    public ServerResponse<CartVo> update(HttpSession session, Integer count, Integer productId) {
 
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
@@ -47,5 +48,20 @@ public class CartController {
         }
         return iCartService.update(user.getId(), productId, count);
     }
+
+    /**
+     * 在购物车中删除产品
+     */
+    @RequestMapping(value = "delete_product.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<CartVo> deleteProduct(HttpSession session , String productIds) {
+
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iCartService.deleteProduct(user.getId(), productIds);
+    }
+
 
 }
