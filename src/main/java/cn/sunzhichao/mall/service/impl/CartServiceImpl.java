@@ -98,6 +98,13 @@ public class CartServiceImpl implements ICartService {
         return ServerResponse.createBySuccess(cartVo);
     }
 
+    /**
+     * 查询购物车中的商品
+     */
+    public ServerResponse<CartVo> list(Integer userId) {
+        CartVo cartVo = this.getCartVoLimit(userId);
+        return ServerResponse.createBySuccess(cartVo);
+    }
 
     /**
      * 根据mmall_cart里面的数据，返回购物车全部状态的通用方法

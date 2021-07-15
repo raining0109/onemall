@@ -21,6 +21,21 @@ public class CartController {
     @Autowired
     private ICartService iCartService;
 
+
+    /**
+     * 向购物车里面添加产品
+     */
+    @RequestMapping(value = "list.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<CartVo> list(HttpSession session) {
+
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iCartService.list(user.getId());
+    }
+
     /**
      * 向购物车里面添加产品
      */
