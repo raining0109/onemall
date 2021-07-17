@@ -10,6 +10,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,7 +29,7 @@ public class ShippingController {
     /**
      * 增加地址
      */
-    @RequestMapping("add.do")
+    @RequestMapping(value = "add.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse add(HttpSession session, Shipping shipping) {
 
@@ -46,7 +47,7 @@ public class ShippingController {
     /**
      * 删除地址
      */
-    @RequestMapping("del.do")
+    @RequestMapping(value = "del.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse del(HttpSession session, Integer shippingId) {
 
@@ -64,7 +65,7 @@ public class ShippingController {
     /**
      * 修改地址
      */
-    @RequestMapping("update.do")
+    @RequestMapping(value = "update.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse update(HttpSession session, Shipping shipping) {
 
@@ -82,7 +83,7 @@ public class ShippingController {
     /**
      * 查询地址
      */
-    @RequestMapping("select.do")
+    @RequestMapping(value = "select.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<Shipping> select(HttpSession session, Integer shippingId) {
 
@@ -100,7 +101,7 @@ public class ShippingController {
     /**
      * 分页查询
      */
-    @RequestMapping("list.do")
+    @RequestMapping(value = "list.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<PageInfo> list(HttpSession session,
                                          @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
