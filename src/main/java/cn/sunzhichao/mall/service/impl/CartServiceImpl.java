@@ -144,6 +144,9 @@ public class CartServiceImpl implements ICartService {
                 cartProductVo.setUserId(cartItem.getUserId());
                 cartProductVo.setProductId(cartItem.getProductId());
 
+                //初始的总价,一定要注意，否则就会出现NPE
+                cartProductVo.setProductTotalPrice(new BigDecimal("0"));
+
                 Product product = productMapper.selectByPrimaryKey(cartItem.getProductId());
                 if (product != null) {
                     //product不为空，继续组装cartProductVo
