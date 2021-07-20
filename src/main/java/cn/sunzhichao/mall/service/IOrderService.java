@@ -5,5 +5,7 @@ import cn.sunzhichao.mall.vo.OrderVo;
 
 public interface IOrderService {
 
-    ServerResponse<OrderVo> createOrder(Integer userId, Integer shippingId);
+    ServerResponse createOrder(Integer userId, Integer shippingId);
+
+    ServerResponse<String> cancel(Integer userId, Long orderNo);
 }

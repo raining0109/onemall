@@ -23,6 +23,7 @@ public class OrderController {
     @Autowired
     private IOrderService iOrderService;
 
+    //创建订单
     @RequestMapping("create.do")
     @ResponseBody
     public ServerResponse create(HttpSession session, Integer shippingId) {
@@ -35,5 +36,20 @@ public class OrderController {
         }
         //业务逻辑
         return iOrderService.createOrder(user.getId(), shippingId);
+    }
+
+    //取消订单
+    @RequestMapping("create.do")
+    @ResponseBody
+    public ServerResponse cancel(HttpSession session, Long orderNo) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(
+                    ResponseCode.NEED_LOGIN.getCode(),
+                    ResponseCode.NEED_LOGIN.getDesc()
+            );
+        }
+        //业务逻辑
+        return iOrderService.cancel(user.getId(), orderNo);
     }
 }
