@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     //取消订单
-    @RequestMapping("create.do")
+    @RequestMapping("cancel.do")
     @ResponseBody
     public ServerResponse cancel(HttpSession session, Long orderNo) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);

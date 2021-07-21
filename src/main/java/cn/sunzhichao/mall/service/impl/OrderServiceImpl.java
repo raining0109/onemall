@@ -378,6 +378,8 @@ public class OrderServiceImpl implements IOrderService {
 
                 orderMapper.updateByPrimaryKeySelective(order);
                 return ServerResponse.createBySuccess("发货成功");
+            } else {
+                return ServerResponse.createByErrorMessage("订单未付款或者已经取消/关闭");
             }
         }
         return ServerResponse.createByErrorMessage("订单不存在");
