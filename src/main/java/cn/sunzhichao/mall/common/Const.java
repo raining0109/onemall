@@ -53,7 +53,6 @@ public class Const {
     }
 
     public enum OrderStatusEnum {
-        //        int NO_PAY = 1;//todo 未支付状态，数字多少我不知道
         CANCELED(0, "已取消"),
         NO_PAY(10, "未支付"),
         PAID(20, "已支付"),
@@ -85,6 +84,14 @@ public class Const {
             }
             throw new RuntimeException("没有找到对应的枚举");
         }
+    }
+
+    public interface AlipayCallback {
+        String TRADE_STATUS_WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
+        String TRADE_STATUS_TRADE_SUCCESS = "TRADE_SUCCESS";
+
+        String RESPONSE_SUCCESS = "success";
+        String RESPONSE_FAILED = "failed";
     }
 
     public enum PayPlatformEnum {

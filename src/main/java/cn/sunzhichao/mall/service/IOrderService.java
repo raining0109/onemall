@@ -4,7 +4,18 @@ import cn.sunzhichao.mall.common.ServerResponse;
 import cn.sunzhichao.mall.vo.OrderVo;
 import com.github.pagehelper.PageInfo;
 
+import java.util.Map;
+
 public interface IOrderService {
+
+    //pay
+
+    ServerResponse pay(Long orderNo, Integer userId, String path);
+
+    ServerResponse aliCallback(Map<String,String> params);
+
+    ServerResponse queryOrderPayStatus(Integer userId,Long orderNo);
+    //order
 
     ServerResponse createOrder(Integer userId, Integer shippingId);
 
